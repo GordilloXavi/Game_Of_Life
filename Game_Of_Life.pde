@@ -1,3 +1,4 @@
+//TODO: toggle LOOPING to reset the simulation when the number of particles is really big in proportion to size of the board
 Board board;
 int s = 800;
 int rate = 10;
