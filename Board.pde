@@ -3,6 +3,8 @@
 //An occupied position at time t will contain a bacterium at time t + 1 if and only if at time t it had two or three neighbor bacteria.
 
 class Board{
+  
+  boolean running = false;
   int initialPopulation = 15;
   int population = 0;
   boolean pressed = false;
@@ -37,7 +39,7 @@ class Board{
     generate();
   }
   
-  void show(){
+  void show(){ //TODO: show a pause logo when the simulation is paused.
     
     int w = width/cols;
     int h = height/rows;
@@ -46,16 +48,19 @@ class Board{
       for(int j = 0; j<cols; ++j){
         if(board[i][j] == true){
           fill(col);
-          noStroke();
+          stroke(0);
+          if(w<3)noStroke();
           rect(i*h, j*w, w,h);
         }
       }
     }
     fill(255,0,0);
     stroke(255);
-    textSize(18);
+    textSize(20);
     text("Population: " + population,20,height-25);
-    
+    fill(150);
+    if(running)text("Running" ,width-100,20);
+    else text("Paused" ,width-89,20);
   }
   
   boolean checkPosition(int i, int j){
@@ -67,14 +72,14 @@ class Board{
 
     int bact = 0;
 
-    if(!upper && board[i-1][j])bact = bact+1;
-    if(!left && board[i][j-1])bact = bact+1;
-    if(!lower && board[i+1][j])bact = bact+1;
-    if(!right && board[i][j+1])bact = bact+1;
-    if(!upper && !left && board[i-1][j-1])bact = bact+1;
-    if(!lower && !right && board[i+1][j+1])bact = bact+1;
-    if(!upper && !right && board[i-1][j+1])bact = bact+1;
-    if(!lower && !left && board[i+1][j-1])bact = bact+1;
+    if(!upper && board[i-1][j])bact++;
+    if(!left && board[i][j-1])bact++;
+    if(!lower && board[i+1][j])bact++;
+    if(!right && board[i][j+1])bact++;
+    if(!upper && !left && board[i-1][j-1])bact++;
+    if(!lower && !right && board[i+1][j+1])bact++;
+    if(!upper && !right && board[i-1][j+1])bact++;
+    if(!lower && !left && board[i+1][j-1])bact++;
     
     if(board[i][j] && (bact == 2 || bact == 3))return true;
     if(!board[i][j] && bact == 3)return true;
@@ -82,14 +87,23 @@ class Board{
     return false;
   }
   
+  boolean[][] createBoard(){
+    boolean[][] board2 = new boolean[rows][cols];;
+    for(int i = 0; i<rows; ++i){
+      for(int j = 0; j<cols; ++j)board2[i][j] = board[i][j];
+    }
+    return board2;
+  }
+  
   void evolve(){
+    boolean[][] board2 = createBoard();
+    
     int total = 0;
      for(int i = 0; i<rows; ++i){
       for(int j = 0; j<cols; ++j){
         boolean alive = checkPosition(i,j);
-        if(alive)total++;
-        board[i][j] = alive;
-        
+        if(running)board2[i][j] = alive;
+        if(board2[i][j])total++;
       }
     
   }  
@@ -99,12 +113,13 @@ class Board{
     //int h = height/rows;
     int x = (cols*mouseX)/width;
     int y = (rows*mouseY)/height;
-    board[x][y] = true;
+    if(x>=0 && x<rows && y>=0 && y<cols)board2[x][y] = true;
   }
   
+  
   //println("total bateries: " + total);
-
-  r =  int(map(total, 0,40000, 0,255));
+  board = board2;
+  //r =  int(map(total, 0,40000, 0,255));
   population = total;
 
   }
