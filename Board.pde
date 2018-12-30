@@ -1,9 +1,9 @@
-
 //An empty position at time t will contain a bacterium at time t + 1 if and only if at time t it had exactly three neighbor bacteria.
 //An occupied position at time t will contain a bacterium at time t + 1 if and only if at time t it had two or three neighbor bacteria.
 
 class Board{
   
+  boolean explosion = false;
   boolean half = false;
   boolean running = false;
   int initialPopulation = 15;
@@ -40,6 +40,10 @@ class Board{
     board = new boolean[rows][cols];
     generate();
   }
+
+  void explode(){
+    explosion = ! explosion;
+  } 
   
   void show(){ //TODO: show a pause logo when the simulation is paused.
     
@@ -105,10 +109,14 @@ class Board{
       for(int j = 0; j<cols; ++j){
         boolean alive = checkPosition(i,j);
         if(running)board2[i][j] = alive;
+        if(explosion && j%4 == 0){
+          board[i][j] = true;
+        } 
         if(board2[i][j])total++;
       }
     
   }  
+     if(explosion)explosion = false;
   
   if(pressed){    //PAINTING ON THE BOARD
     //int w = width/cols;

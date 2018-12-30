@@ -1,11 +1,9 @@
-//TODO: toggle LOOPING to reset the simulation when the number of particles is really big in proportion to size of the board
-
 Board board;
-int s = 800;
+int s = 300;
 int rate = 40;
 void setup(){
   
-  size(800,800);
+  size(900,900);
   //fullScreen();
   background(0);
   board = new Board(s);
@@ -13,9 +11,10 @@ void setup(){
 }
 
 void keyPressed(){
-  if(key == 'h' || key == 'H')board.half = !board.half;
-  if(key == ' ')board.reset();
-  if(key == 'r' || key == 'R')board.running = !board.running;
+  if(key == 'h' || key == 'H')board.half = !board.half; // The population will only spawn in the upper half of the screen
+  if(key == ' ')board.reset(); // Resets the simulation
+  if(key == 'r' || key == 'R')board.running = !board.running; // Pauses / Resumes the simulation
+  if(key == 'x' || key == 'X')board.explode(); // When the simulation reaches a static scenario, press x to create new particles in the same simulation
 }
 
 void mousePressed(){
