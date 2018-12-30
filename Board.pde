@@ -4,6 +4,7 @@
 
 class Board{
   
+  boolean half = false;
   boolean running = false;
   int initialPopulation = 15;
   int population = 0;
@@ -27,9 +28,10 @@ class Board{
   void generate(){
     for(int i = 0; i<rows; ++i){
       for(int j = 0; j<cols; ++j){
+
         int r = int(random(0,initialPopulation));    //INCREASE THE SECOND VALUE TO DECREADSE THE STARTING NUMBER OF BACTERIES
         if(r == 0)board[i][j] = true;
-        else board[i][j] = false;
+        if(half && j > cols/2 || r != 0)board[i][j] = false;
       }
     }
   }

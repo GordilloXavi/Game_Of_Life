@@ -1,7 +1,7 @@
 //TODO: toggle LOOPING to reset the simulation when the number of particles is really big in proportion to size of the board
 
 Board board;
-int s = 400;
+int s = 800;
 int rate = 40;
 void setup(){
   
@@ -13,6 +13,7 @@ void setup(){
 }
 
 void keyPressed(){
+  if(key == 'h' || key == 'H')board.half = !board.half;
   if(key == ' ')board.reset();
   if(key == 'r' || key == 'R')board.running = !board.running;
 }
